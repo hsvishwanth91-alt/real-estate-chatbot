@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}HomeFind - AI Real Estate{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- ===================== NAVBAR ===================== -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{{ url_for('home') }}" class="logo">🏠 HomeFind</a>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('properties') }}">Properties</a></li>
+                <li><a href="{{ url_for('book_visit') }}">Book a Visit</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ===================== FLASH MESSAGES ===================== -->
+    <div class="flash-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, msg in messages %}
+                    <div class="flash flash-{{ category }}">{{ msg }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- ===================== PAGE CONTENT ===================== -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- ===================== FOOTER ===================== -->
+    <footer class="footer">
+        <p>&copy; 2026 HomeFind AI Real Estate | College Mini Project</p>
+    </footer>
+
+    <!-- ===================== CHATBOT WIDGET ===================== -->
+    <div id="chatbot-widget">
+        <button id="chatbot-toggle">💬</button>
+        <div id="chatbot-box" class="hidden">
+            <div class="chatbot-header">
+                <span>AI Property Assistant</span>
+                <button id="chatbot-close">&times;</button>
+            </div>
+            <div id="chatbot-messages"></div>
+            <form id="chatbot-form">
+                <input type="text" id="chatbot-input" placeholder="Ask about properties..." autocomplete="off" required>
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/chatbot.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

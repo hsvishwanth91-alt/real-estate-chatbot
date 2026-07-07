@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Book a Site Visit - HomeFind{% endblock %}
+
+{% block content %}
+<section class="booking-section">
+    <h1>Book a Site Visit</h1>
+    <p>Fill in your details below and our team will confirm your visit shortly.</p>
+
+    <form class="booking-form" method="POST" action="{{ url_for('book_visit') }}">
+        <label for="property_id">Select Property</label>
+        <select name="property_id" id="property_id">
+            <option value="">-- General Enquiry --</option>
+            {% for p in properties %}
+            <option value="{{ p.id }}" {% if selected_id == p.id %}selected{% endif %}>
+                {{ p.title }} ({{ p.city }})
+            </option>
+            {% endfor %}
+        </select>
+
+        <label for="name">Full Name *</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="email">Email *</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="phone">Phone Number *</label>
+        <input type="tel" id="phone" name="phone" required>
+
+        <label for="visit_date">Preferred Visit Date *</label>
+        <input type="date" id="visit_date" name="visit_date" required>
+
+        <label for="message">Message (optional)</label>
+        <textarea id="message" name="message" rows="4" placeholder="Any specific requirements..."></textarea>
+
+        <button type="submit" class="btn-primary">Confirm Booking</button>
+    </form>
+</section>
+{% endblock %}

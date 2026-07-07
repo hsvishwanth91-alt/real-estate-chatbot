@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Browse Properties - HomeFind{% endblock %}
+
+{% block content %}
+<section class="search-section">
+    <h1>Search Properties</h1>
+    <form class="filter-form" action="{{ url_for('properties') }}" method="GET">
+        <input type="text" name="location" placeholder="Location or city" value="{{ location }}">
+        <input type="number" name="max_budget" placeholder="Max budget (₹)" value="{{ max_budget }}">
+        <select name="property_type">
+            <option value="">Any Type</option>
+            <option value="Apartment" {% if property_type == "Apartment" %}selected{% endif %}>Apartment</option>
+            <option value="Villa" {% if property_type == "Villa" %}selected{% endif %}>Villa</option>
+            <option value="Plot" {% if property_type == "Plot" %}selected{% endif %}>Plot</option>
+            <option value="Independent House" {% if property_type == "Independent House" %}selected{% endif %}>Independent House</option>
+        </select>
+        <button type="submit">Filter</button>
+        <a href="{{ url_for('properties') }}" class="btn-clear">Clear</a>
+    </form>
+</section>
+
+<section class="property-list">
+    <p class="result-count">{{ properties|length }} properties found</p>
+    <div class="property-grid">
+        {% for p in properties %}
+        <div class="property-card">
+            <img src="{{ p.image_url }}" alt="{{ p.title }}">
+            <div class="property-info">
+                <h3>{{ p.title }}</h3>
+                <p class="location">📍 {{ p.location }}, {{ p.city }}</p>
+                <p class="price">₹{{ "%.1f"|format(p.price / 100000) }} Lakh</p>
+                <p class="details">{{ p.bedrooms }} BHK &bull; {{ p.area_sqft }} sqft &bull; {{ p.property_type }}</p>
+                <a href="{{ url_for('property_detail', property_id=p.id) }}" class="btn-view">View Details</a>
+            </div>
+        </div>
+        {% else %}
+        <p>No properties match your search. Try adjusting your filters.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

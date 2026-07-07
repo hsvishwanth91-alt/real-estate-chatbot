@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}HomeFind - Find Your Dream Property{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <h1>Find Your Dream Home with AI</h1>
+        <p>Search thousands of properties or chat with our AI assistant to get instant recommendations.</p>
+
+        <form class="hero-search" action="{{ url_for('properties') }}" method="GET">
+            <input type="text" name="location" placeholder="Enter city or locality (e.g. Pune)">
+            <input type="number" name="max_budget" placeholder="Max budget (₹)">
+            <select name="property_type">
+                <option value="">Any Type</option>
+                <option value="Apartment">Apartment</option>
+                <option value="Villa">Villa</option>
+                <option value="Plot">Plot</option>
+                <option value="Independent House">Independent House</option>
+            </select>
+            <button type="submit">Search</button>
+        </form>
+    </div>
+</section>
+
+<section class="featured">
+    <h2>Featured Properties</h2>
+    <div class="property-grid">
+        {% for p in featured %}
+        <div class="property-card">
+            <img src="{{ p.image_url }}" alt="{{ p.title }}">
+            <div class="property-info">
+                <h3>{{ p.title }}</h3>
+                <p class="location">📍 {{ p.location }}, {{ p.city }}</p>
+                <p class="price">₹{{ "%.1f"|format(p.price / 100000) }} Lakh</p>
+                <p class="details">{{ p.bedrooms }} BHK &bull; {{ p.area_sqft }} sqft &bull; {{ p.property_type }}</p>
+                <a href="{{ url_for('property_detail', property_id=p.id) }}" class="btn-view">View Details</a>
+            </div>
+        </div>
+        {% else %}
+        <p>No properties available right now. Please check back later.</p>
+        {% endfor %}
+    </div>
+    <div class="see-all">
+        <a href="{{ url_for('properties') }}" class="btn-primary">See All Properties</a>
+    </div>
+</section>
+
+<section class="ai-highlight">
+    <h2>🤖 Meet Your AI Property Assistant</h2>
+    <p>Click the chat bubble in the corner and ask things like:</p>
+    <ul>
+        <li>"Show me 2BHK apartments in Mumbai under 1 crore"</li>
+        <li>"What villas are available in Chennai?"</li>
+        <li>"How do I book a site visit?"</li>
+    </ul>
+</section>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}{{ property.title }} - HomeFind{% endblock %}
+
+{% block content %}
+<section class="detail-section">
+    <a href="{{ url_for('properties') }}" class="back-link">&larr; Back to Properties</a>
+
+    <div class="detail-grid">
+        <img src="{{ property.image_url }}" alt="{{ property.title }}" class="detail-image">
+
+        <div class="detail-info">
+            <h1>{{ property.title }}</h1>
+            <p class="location">📍 {{ property.location }}, {{ property.city }}</p>
+            <p class="price">₹{{ "%.1f"|format(property.price / 100000) }} Lakh</p>
+
+            <div class="detail-specs">
+                <div><strong>Type</strong><span>{{ property.property_type }}</span></div>
+                <div><strong>Bedrooms</strong><span>{{ property.bedrooms }}</span></div>
+                <div><strong>Bathrooms</strong><span>{{ property.bathrooms }}</span></div>
+                <div><strong>Area</strong><span>{{ property.area_sqft }} sqft</span></div>
+                <div><strong>Status</strong><span>{{ property.status }}</span></div>
+            </div>
+
+            <h3>Description</h3>
+            <p class="description">{{ property.description }}</p>
+
+            <a href="{{ url_for('book_visit', property_id=property.id) }}" class="btn-primary">Book a Site Visit</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
