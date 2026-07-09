@@ -20,6 +20,7 @@ stepping stone before using a real NLP/ML library.
 """
 
 import re
+import sqlite3
 
 
 class RealEstateChatbot:
@@ -46,12 +47,18 @@ class RealEstateChatbot:
     # -----------------------------------------------------------
     def _query(self, sql, params=None):
         conn = self.get_db_connection()
-        cursor = conn.cursor(dictionary=True)
-        cursor.execute(sql, params or ())
-        rows = cursor.fetchall()
-        cursor.close()
-        conn.close()
-        return rows
+        try:
+            if isinstance(conn, sqlite3.Connection):
+                cursor = conn.cursor()
+                cursor.execute(sql, params or ())
+                rows = [dict(row) for row in cursor.fetchall()]
+            else:
+                cursor = conn.cursor(dictionary=True)
+                cursor.execute(sql, params or ())
+                rows = cursor.fetchall()
+            return rows
+        finally:
+            conn.close()
 
     # -----------------------------------------------------------
     # Extract a budget number (in rupees) from free text.
@@ -188,13 +195,13 @@ class RealEstateChatbot:
             params = []
 
             if city:
-                sql += " AND city LIKE %s"
+                sql += " AND city LIKE ?"
                 params.append(f"%{city}%")
             if ptype:
-                sql += " AND property_type = %s"
+                sql += " AND property_type = ?"
                 params.append(ptype)
             if budget:
-                sql += " AND price <= %s"
+                sql += " AND price <= ?"
                 params.append(budget)
 
             sql += " ORDER BY price ASC"
